@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="page_header">
+    <h1>Date time information</h1>
+</div>
+<p> Time in UTC is {{current_time}}</p>
+<p>Local Date and Time is {{moment(current_time).format('LLL')}}</p>
+<p>Relative timestamp is {{moment(current_time).fromNow(refresh=True)}}</p>
+{% endblock %}
