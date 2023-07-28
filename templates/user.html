@@ -1,0 +1,9 @@
+{%macro render_user(user)%}
+    <li>{{user}}</li>
+{%endmacro%}
+
+<ul>
+    {%for user in users%}
+        {{render_user(user)}}
+    {%endfor%}
+</ul>
