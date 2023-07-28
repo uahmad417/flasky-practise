@@ -4,44 +4,47 @@ from flask import (
     Flask,
     make_response,
     redirect,
+    render_template,
     request
 )
+from flask_bootstrap import Bootstrap
 
 # creating flask application instance
+# and initializing flask extensions
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
-# root URL for the application
+# root URL
 @app.route('/')
 def index():
-    return '<h1>Hello World!</h1>'
-
-# static url with a dynamic component
-def user(name):
-    return f'<h1>Hello {name}!</h1>'
-
-# routing using method
-app.add_url_rule('/user/<name>','user',user)
-
-# Accessing the request objects throguh the request context
-@app.route('/context/')
-def context():
-    user_agent = request.headers.get('User-Agent')
-    return f'<h1>Your Browser is {user_agent}</h1>'
-
-@app.route('/response/')
-def response():
-    # making response using the response object
-    response = make_response('<h1>testing request</h1>')
-    response.status_code = 400
+    response = make_response(
+        render_template('index.html')
+        )
     return response
 
-@app.route('/redirect/')
-def new():
-    return redirect('http://example.com')
+# user URL
+@app.route('/user/<name>')
+def user(name):
+    response = make_response(
+        render_template('user.html',name=name)
+        )
+    return response
 
-@app.route('/id/<int:id>')
-def get_id(id):
-    if id != 10:
-        abort(400)
-    response = make_response('<h1>Welcome</h1>')
+# error handling views
+@app.errorhandler(404)
+def page_not_found(e):
+    response = make_response(
+        render_template('404.html'),
+        404
+    )
+
+    return response
+
+@app.errorhandler(500)
+def internal_error(e):
+    response = make_response(
+        render_template('500.html'),
+        500
+    )
+
     return response
