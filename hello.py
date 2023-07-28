@@ -1,4 +1,5 @@
 # importing the `Flask` class
+from datetime import datetime
 from flask import (
     abort,
     Flask,
@@ -8,11 +9,13 @@ from flask import (
     request
 )
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
 
 # creating flask application instance
 # and initializing flask extensions
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 # root URL
 @app.route('/')
@@ -24,6 +27,11 @@ def index():
 @app.route('/user/<name>')
 def user(name):
     response = make_response(render_template('user.html',name=name))
+    return response
+
+@app.route('/datetime/')
+def date_time():
+    response = make_response(render_template('date.html', current_time=datetime.utcnow()))
     return response
 
 # error handling views
